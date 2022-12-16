@@ -208,7 +208,23 @@ FROM posts p
 INNER JOIN first_comment f
 ON p.Id = f.PostId
 
--- Opt.2:
+-- Opt.2-SQL server:
+WITH first_comment AS
+(SELECT
+	*
+FROM (SELECT
+		*,
+		DENSE_RANK() OVER(PARTITION BY PostId ORDER BY CreationDate) as _Num
+	FROM comments c) AS TB3
+WHERE
+	_Num = 1)
+SELECT
+	avg(datediff(hour, p.CreationDate, f.CreationDate)) AS AvgHour
+FROM posts p
+INNER JOIN first_comment f
+ON p.Id = f.PostId
+
+-- Opt.3:
 WITH comment_timming AS
 (SELECT 
 	c.PostId,
@@ -220,7 +236,7 @@ FROM posts p
 INNER JOIN comments c
 ON p.Id = c.PostId)
 SELECT
-	avg(hour(timediff(comment_create_date,post_create_date))) AS AvgHour
+	avg(datediff(hour, post_create_date, comment_create_date)) AS AvgHour
 FROM comment_timming
 WHERE
 	_Num = 1
