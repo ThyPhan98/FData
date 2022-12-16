@@ -113,14 +113,14 @@ WHERE
 				FROM votes v)
 
 -- Opt.2:
-WITH "VOTE-CTE" AS 
+WITH No_vote AS 
     (
     SELECT id FROM users
-    EXCEPT
+    EXCEPT -- Get record from table a and discard from table b
     SELECT userID FROM votes  
     )
-SELECT COUNT(*)
-FROM "VOTE-CTE"		
+SELECT count(*) AS TotalofUser
+FROM No_vote	
 
 	-- 4. Display all posts having the highest amount of comments
 WITH Rank_comment AS
