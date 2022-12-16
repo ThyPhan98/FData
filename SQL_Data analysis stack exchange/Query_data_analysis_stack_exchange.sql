@@ -21,7 +21,6 @@ SELECT
 	count(DISTINCT Id) AS TotalofVote
 FROM votes v
 GROUP BY datename(weekday, CreationDate)
-ORDER BY dayofweek(CreationDate)
 
 	-- 3. List all comments created on September 19th, 2012
 -- Opt.1:
@@ -141,7 +140,7 @@ WHERE _Rank = 1
 
 
 -- If display the second-highest amount of comments 
-WITH TOP_COMMENT AS
+WITH Top_comment AS
 (
     SELECT  Title, 
             COUNT(*) AS number_of_comments , 
@@ -151,7 +150,7 @@ WITH TOP_COMMENT AS
     GROUP BY Title
     )
 SELECT Title 
-FROM TOP_COMMENT
+FROM Top_comment
 WHERE comment_count_ranking = 2
 
 	-- 5. For each post, how many votes are coming from users living in Canada ? What’s their percentage of the total number of votes (option)
