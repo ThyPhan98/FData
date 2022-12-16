@@ -246,12 +246,18 @@ ORDER BY count(t1.Id) DESC
 LIMIT 1
 
 -- Opt.2-SQL server:
-SELECT
-	Id,
-	value
-FROM posts p 
-CROSS APPLY STRING_SPLIT(Tags, '<')
-
+SELECT TOP 1
+	Post_tag,
+	count(*) AS TotalofPost
+	FROM (
+			SELECT
+				Id,
+				VALUE AS Post_tag
+			FROM posts p 
+			CROSS APPLY STRING_SPLIT(Tags, '>')) AS TBA
+WHERE Post_tag != ''
+GROUP BY Post_tag
+ORDER BY  count(*) DESC
 
 	-- 8. Create a pivot table displaying how many posts were created for each year (Y axis) and each month (X axis)
 -- Opt.1:
